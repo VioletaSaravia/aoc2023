@@ -34,6 +34,3 @@ partOne :: String -> Int
 partOne input = sum $ filter isAdjacent (allParts input)
 
 partTwo :: String -> Int
-
-main :: IO()
-main = print(partOne input ++ '\n' ++ partTwo input) where input = getContents
