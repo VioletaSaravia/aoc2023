@@ -4,7 +4,7 @@ data SchematicObject = PartNumber { num :: [Char], xStart :: Int, xEnd, , y :: I
                      | StarSymbol {x :: Int, y :: Int}
                      | Symbol {x :: Int, y :: Int}
 
-parseParts :: ([Char] , Int, Maybe PartNumber) -> [SchematicObject]                  -- should be Int, Int
+parseParts :: ([Char], Int, Int, Maybe PartNumber) -> [SchematicObject]             -- should be Int, Int
 parseParts (chars, i, part) = case (chars, i, part) of
     -- End of the line
     ([], _, Nothing)               -> []
@@ -19,7 +19,7 @@ parseParts (chars, i, part) = case (chars, i, part) of
     (n:ns, i, Just p)  | isDigit n -> parseParts        ns (i + 1) (Just p)          -- add n to p
 
     -- Parse star symbols
-    ('*':ns, i, Nothing)           -> parseParts        ns (i + 1) SchematicObject{} -- add fields
+    ('*':ns, i, Nothing)           -> parseParts        ns (i + 1) StarSymbol{}      -- add fields
     ('*':ns, i, Just p)            -> p ++ parseParts   ns (i + 1) StarSymbol{}      -- add fields
 
     -- Parse other symbols
@@ -28,7 +28,7 @@ parseParts (chars, i, part) = case (chars, i, part) of
 
 allParts :: String -> [[Char]]
 allParts input = map (++) (map parseParts (parseInput input))
-    where parseInput = map (map (:[])) (lines input)
+    where parseInput = map (map (:[])) (lines input??)
 
 partOne :: String -> Int
 partOne input = sum $ filter isAdjacent (allParts input)
